@@ -1,0 +1,56 @@
+namespace: prod
+
+environment: production
+
+frontend:
+  replicaCount: 3
+
+  image:
+    repository: nginx
+    tag: 1.27
+
+  host: demo.company.com
+
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "256Mi"
+
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+
+backend:
+  replicaCount: 3
+
+  image:
+    repository: node
+    tag: 20-alpine
+
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "256Mi"
+
+    limits:
+      cpu: "1"
+      memory: "1Gi"
+
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    cpu: 70
+
+database:
+  image:
+    repository: postgres
+    tag: "16"
+
+  storage: 20Gi
+
+secrets:
+  db:
+    name: appdb
+    user: produser
+    password: pass
