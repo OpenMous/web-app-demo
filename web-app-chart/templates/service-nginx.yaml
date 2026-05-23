@@ -1,12 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-service
+  name: {{ include "webapp-chart.fullname" . }}
   namespace: {{ .Values.namespace }}
 spec:
-  type: ClusterIP
+  type: {{ .Values.service.type }}
   selector:
-    app: frontend
+    app: {{ include "webapp-chart.name" . }}
   ports:
-    - port: 80
+    - protocol: TCP
+      port: {{ .Values.service.port }}
       targetPort: 80

@@ -1,33 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+  name: {{ include "webapp-chart.fullname" . }}
   namespace: {{ .Values.namespace }}
 spec:
-  replicas: {{ .Values.frontend.replicaCount }}
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: frontend
+      app: {{ include "webapp-chart.name" . }}
   template:
     metadata:
       labels:
-        app: frontend
+        app: {{ include "webapp-chart.name" . }}
     spec:
-      initContainers:
-        - name: wait-for-postgres
-          image: busybox:1.36
-          command:
-            - sh
-            - -c
-            - |
-              until nc -z postgres-service 5432; do
-                echo "Waiting for postgress..."
-                sleep 2
-              done
+      serviceAccountName: {{ include "webapp-chart.fullname" . }}
       containers:
-        - name: nginx
-          image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
+        - name: webapp
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: 80
+          env:
+            - name: ENVIRONMENT
+              value: {{ .Values.config.environment }}
           resources:
-{{ toYaml .Values.frontend.resources | indent 12 }}
+{{ toYaml .Values.resources | indent 12 }}

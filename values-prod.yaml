@@ -1,0 +1,26 @@
+replicaCount: 3
+
+image:
+  tag: 1.25
+
+ingress:
+  host: webapp.demo.com
+
+config:
+  environment: production
+
+resources:
+  limits:
+    cpu: "1"
+    memory: "1Gi"
+  requests:
+    cpu: "500m"
+    memory: "512Mi"
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70 
+
+namespace: web-prod
