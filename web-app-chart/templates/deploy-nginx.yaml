@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "webapp-chart.fullname" . }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "webapp-chart.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "webapp-chart.name" . }}
+    spec:
+      serviceAccountName: {{ include "webapp-chart.fullname" . }}
+      containers:
+        - name: nginx
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 80
+          env:
+            - name: ENVIRONMENT
+              value: {{ .Values.environment }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "webapp-chart.fullname" . }}-config
+            - secretRef:
+                name: {{ include "webapp-chart.fullname" . }}-secret
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          volumeMounts:
+            - name: web-content
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: web-content
+          hostPath:
+            path: {{ .Values.volume.hostPath }}
+            type: Directory

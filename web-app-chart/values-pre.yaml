@@ -1,0 +1,22 @@
+namespace: pre
+environment: pre
+appName: webapp-pre
+replicaCount: 1
+image:
+  repository: nginx
+  tag: stable
+  pullPolicy: IfNotPresent
+ingress:
+  host: pre.webapp.local
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "250m"
+    memory: "256Mi"
+secret:
+  username: preuser
+  password: prepassword
+volume:
+  hostPath: /home/admin1/web-app-demo/src
