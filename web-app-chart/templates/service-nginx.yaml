@@ -4,10 +4,11 @@ metadata:
   name: {{ include "webapp-chart.fullname" . }}
   namespace: {{ .Values.namespace }}
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: {{ include "webapp-chart.name" . }}
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
+      nodePort: 30080
