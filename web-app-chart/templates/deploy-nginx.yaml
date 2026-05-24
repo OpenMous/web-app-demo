@@ -15,13 +15,26 @@ spec:
     spec:
       serviceAccountName: {{ include "webapp-chart.fullname" . }}
       containers:
-        - name: webapp
+        - name: nginx
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: 80
           env:
             - name: ENVIRONMENT
-              value: {{ .Values.config.environment }}
+              value: {{ .Values.environment }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "webapp-chart.fullname" . }}-config
+            - secretRef:
+                name: {{ include "webapp-chart.fullname" . }}-secret
           resources:
 {{ toYaml .Values.resources | indent 12 }}
+          volumeMounts:
+            - name: web-content
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: web-content
+          hostPath:
+            path: {{ .Values.volume.hostPath }}
+            type: Directory

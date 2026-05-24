@@ -4,4 +4,5 @@ metadata:
   name: {{ include "webapp-chart.fullname" . }}-config
   namespace: {{ .Values.namespace }}
 data:
-  environment: "{{ .Values.config.environment }}"
+  APP_ENV: "{{ .Values.environment }}"
+  APP_NAME: "{{ .Values.appName }}"

@@ -4,10 +4,10 @@ metadata:
   name: {{ include "webapp-chart.fullname" . }}
   namespace: {{ .Values.namespace }}
 spec:
-  type: {{ .Values.service.type }}
+  type: ClusterIP
   selector:
     app: {{ include "webapp-chart.name" . }}
   ports:
     - protocol: TCP
-      port: {{ .Values.service.port }}
+      port: 80
       targetPort: 80
