@@ -19,4 +19,4 @@ secret:
   username: preuser
   password: prepassword
 volume:
-  hostPath: /home/admin1/web-app-demo/web-app-chart/web-content/
+  hostPath: /home/admin1/web-app-demo/src
