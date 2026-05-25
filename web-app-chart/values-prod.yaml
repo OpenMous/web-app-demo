@@ -1,0 +1,22 @@
+namespace: web-prod
+environment: production
+appName: web-app-prod
+replicaCount: 3
+image:
+  repository: nginx
+  tag: 1.27
+  pullPolicy: IfNotPresent
+ingress:
+  host: webapp.pavel.com
+resources:
+  requests:
+    cpu: "250m"
+    memory: "256Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+secret:
+  username: produser
+  password: prodpass
+volume:
+  hostPath: /home/admin1/web-app-demo/src/
