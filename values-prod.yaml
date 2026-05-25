@@ -1,13 +1,13 @@
-namespace: prod
+namespace: web-prod
 environment: production
-appName: webapp-prod
+appName: web-app-prod
 replicaCount: 3
 image:
   repository: nginx
   tag: 1.27
   pullPolicy: IfNotPresent
 ingress:
-  host: webapp.company.com
+  host: webapp.pavel.com
 resources:
   requests:
     cpu: "250m"
@@ -17,6 +17,6 @@ resources:
     memory: "512Mi"
 secret:
   username: produser
-  password: CHANGE_ME
+  password: prodpass
 volume:
-  hostPath: /home/admin1/web-app-demo/web-app-chart/web-content/
+  hostPath: /home/admin1/web-app-demo/src/
